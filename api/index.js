@@ -25,6 +25,7 @@ connection.once("open" , () => console.log("connencted to mongoose"))
 //         age: "Byah Ki"
 //     })
 // })
+ 
 
 app.post('/register', async (req,res) => {
     const {username,password} = req.body;
