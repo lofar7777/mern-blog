@@ -4,8 +4,10 @@ const mongoose = require("mongoose");
 const User = require('./models/User');
 const bcrypt = require('bcryptjs');
 const app = express();
+const jwt = require('jsonwebtoken');
 
 const salt = bcrypt.genSaltSync(10);    // to create hash of the registered password
+const secret = 'asdfasdfqe2343asdfdasd';
 
 app.use(cors());
 app.use(express.json());
@@ -27,6 +29,7 @@ connection.once("open" , () => console.log("connencted to mongoose"))
 // })
  
 
+// Route to create new user
 app.post('/register', async (req,res) => {
     const {username,password} = req.body;
     try{
@@ -46,10 +49,20 @@ app.post('/register', async (req,res) => {
 app.post('/login', async (req,res) =>{
     const {username,password} = req.body;
     const userDoc = await User.findOne({username});
-    const passOk = bycrypt.compareSync(password, userDoc.password);
-    res.json(passOk);
-})
 
+    const passOk = bcrypt.compareSync(password, userDoc.password);
+    if(passOk){
+        //logged in 
+        jwt.sign({username, id:userDoc._id}, secret, {} , (err,token) => {
+            if(err) throw err;
+            res.json(token);
+        });
+        
+    }••••
+    else{
+        res.status(400).json('wrong credentials');
+    }
+});
 app.listen(4000);
 // XvV2JeI9157pk41E
 
