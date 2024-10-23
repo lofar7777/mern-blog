@@ -5,12 +5,14 @@ const User = require('./models/User');
 const bcrypt = require('bcryptjs');
 const app = express();
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
 const salt = bcrypt.genSaltSync(10);    // to create hash of the registered password
 const secret = 'asdfasdfqe2343asdfdasd';
 
-app.use(cors());
+app.use(cors({credentials:true,origin:'http://localhost:3000'}));
 app.use(express.json());
+app.use(cookieParser());
 
 mongoose.connect('mongodb+srv://farswangolu:XvV2JeI9157pk41E@cluster0.ofjnm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
 const connection = mongoose.connection;
@@ -55,14 +57,27 @@ app.post('/login', async (req,res) =>{
         //logged in 
         jwt.sign({username, id:userDoc._id}, secret, {} , (err,token) => {
             if(err) throw err;
-            res.json(token);
+            res.cookie('token', token).json('ok');
         });
         
-    }••••
+    }
     else{
         res.status(400).json('wrong credentials');
     }
 });
+
+app.get('/profile',(req,res) => {
+    const {token} = req.cookies;
+    jwt.verify(token, secret, {}, (err, info) => {
+        if(err) throw err;
+        res.json(info);
+    });
+    res.json(req.cookies);
+});
+
+
+
+
 app.listen(4000);
 // XvV2JeI9157pk41E
 
