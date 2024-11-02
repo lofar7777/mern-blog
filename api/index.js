@@ -2,23 +2,31 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require("mongoose");
 const User = require('./models/User');
+const Post = require('./models/Post');
 const bcrypt = require('bcryptjs');
 const app = express();
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
+const uploadMiddleware = multer({ dest: 'uploads/' });
+const fs = require('fs');
+
 
 const salt = bcrypt.genSaltSync(10);    // to create hash of the registered password
 const secret = 'asdfasdfqe2343asdfdasd';
 
+
 app.use(cors({credentials:true,origin:'http://localhost:3000'}));
 app.use(express.json());
 app.use(cookieParser());
+
 
 mongoose.connect('mongodb+srv://farswangolu:XvV2JeI9157pk41E@cluster0.ofjnm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
 const connection = mongoose.connection;
 connection.on("error", (e) => {
     console.log(e);
 })
+
 connection.once("open" , () => console.log("connencted to mongoose"))
 // console.log(connection)
 
@@ -45,7 +53,6 @@ app.post('/register', async (req,res) => {
         console.log(e);
         res.status(400).json(e);
     }
-    
 });
 
 app.post('/login', async (req,res) =>{
@@ -82,6 +89,27 @@ app.post('/logout',(req,res) => {
     res.cookie('token', '').json('ok');
 })
 
+app.post('/post', uploadMiddleware.single('file'),async (req,res) =>{
+    const {originalname,path} = req.file;
+    const parts = originalname.split('.');
+    const ext = parts[parts.length -1];
+    const newPath = path +'.'+ ext;
+    fs.renameSync(path, newPath);
+
+    const {title,summary,content} = req.body;
+    const postDoc = await Post.create({
+        title,
+        summary,
+        content,
+        cover:newPath,
+    });
+
+    res.json({postDoc});
+});
+
+app.get('/post', async (req,res) => {
+    res.json(await Post.find());
+});
 
 app.listen(4000);
 // XvV2JeI9157pk41E
