@@ -10,15 +10,16 @@ const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const uploadMiddleware = multer({ dest: 'uploads/' });
 const fs = require('fs');
-
+// const { createDeflate } = require('zlib');
 
 const salt = bcrypt.genSaltSync(10);    // to create hash of the registered password
-const secret = 'asdfasdfqe2343asdfdasd';
+const secret = 'asdfasasdfafd32323232asdfdasd';
 
 
 app.use(cors({credentials:true,origin:'http://localhost:3000'}));
 app.use(express.json());
 app.use(cookieParser());
+app.use('/uploads', express.static(__dirname + '/uploads'));
 
 
 mongoose.connect('mongodb+srv://farswangolu:XvV2JeI9157pk41E@cluster0.ofjnm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
@@ -96,20 +97,37 @@ app.post('/post', uploadMiddleware.single('file'),async (req,res) =>{
     const newPath = path +'.'+ ext;
     fs.renameSync(path, newPath);
 
-    const {title,summary,content} = req.body;
-    const postDoc = await Post.create({
+    const {token} = req.cookies;
+    jwt.verify(token, secret, {}, async (err, info) => {
+        if(err) throw err;
+        const {title,summary,content} = req.body;
+        const postDoc = await Post.create({
         title,
         summary,
         content,
         cover:newPath,
+        author: info.id,
+    });
+    res.json(postDoc);
     });
 
-    res.json({postDoc});
+    
+
+    
 });
 
 app.get('/post', async (req,res) => {
-    res.json(await Post.find());
+    res.json(
+        await Post.find()
+        .populate('author', ['username'])
+        .sort({createdAt: -1})
+        .limit(20)
+    );
 });
+
+app.get('/post/:id', async(req,res) => {
+    res.json({req});
+})
 
 app.listen(4000);
 // XvV2JeI9157pk41E
