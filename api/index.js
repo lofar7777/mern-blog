@@ -10,10 +10,10 @@ const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const uploadMiddleware = multer({ dest: 'uploads/' });
 const fs = require('fs');
-// const { createDeflate } = require('zlib');
+const { createDeflate } = require('zlib');
 
 const salt = bcrypt.genSaltSync(10);    // to create hash of the registered password
-const secret = 'asdfasasdfafd32323232asdfdasd';
+const secret = 'asdfasdfqe2343asdfdasd';
 
 
 app.use(cors({credentials:true,origin:'http://localhost:3000'}));
@@ -109,11 +109,7 @@ app.post('/post', uploadMiddleware.single('file'),async (req,res) =>{
         author: info.id,
     });
     res.json(postDoc);
-    });
-
-    
-
-    
+    });  
 });
 
 app.get('/post', async (req,res) => {
@@ -125,8 +121,10 @@ app.get('/post', async (req,res) => {
     );
 });
 
-app.get('/post/:id', async(req,res) => {
-    res.json({req});
+app.get('/post/:id', async (req,res) => {
+    const {id} = req.params;
+    const postDoc = await Post.findById(id);
+    res.json(postDoc);
 })
 
 app.listen(4000);

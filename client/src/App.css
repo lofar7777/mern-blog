@@ -34,7 +34,7 @@ header a.logo{
 }
 header nav{
   display: flex;
-  gap: 15px;
+  gap: 24px;
 }
 
 div.post{
