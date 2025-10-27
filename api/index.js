@@ -19,7 +19,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
 
-mongoose.connect('mongodb+srv://farswangolu:XvV2JeI9157pk41E@cluster0.ofjnm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
+mongoose.connect('mongodb+srv://farswangolu:HsclmgDP6DxhNj8M@cluster0.ofjnm.mongodb.net/?appName=Cluster0')
+.then(() => console.log("Connected to mongoose"))
+.catch(err => console.error("Mongoose connection error: ", err));
 
 app.post('/register', async (req,res) => {
   const {username,password} = req.body;

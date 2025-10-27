@@ -1,6 +1,10 @@
 *{
     box-sizing: border-box;
 }
+body{
+    background: linear-gradient(135deg, #eeecf0 0%, #d1d8e3 100%);
+
+}
 a{
     cursor: pointer;
 }
@@ -88,7 +92,7 @@ button{
     cursor: pointer;
     width: 100%;
     display: block;
-    background-color: #555;
+    background: linear-gradient(135deg, #672ca6 0%, #85a2d4 100%);
     border:0;
     color: #fff;
     border-radius: 5px;
