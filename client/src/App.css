@@ -2,15 +2,13 @@
     box-sizing: border-box;
 }
 body{
-    background: linear-gradient(135deg, #eeecf0 0%, #d1d8e3 100%);
+    background: linear-gradient(135deg, #eeecf0 0%, #9ba8bd 100%);
 
 }
 a{
     cursor: pointer;
 }
-body{
-    color: #222;
-}
+
 img{
     max-width: 100%;
 }
@@ -22,7 +20,7 @@ main{
 header{
     display:flex;
     justify-content:space-between;
-    margin-top: 20px;
+    margin-top: 30px;
     margin-bottom: 50px;
     align-items: center;
 }
@@ -77,6 +75,7 @@ div.post p.summary{
 
 form.login, form.register{
     max-width: 400px;
+    max-height: 50px;
     margin: 0 auto;
 }
 input{
@@ -92,11 +91,18 @@ button{
     cursor: pointer;
     width: 100%;
     display: block;
-    background: linear-gradient(135deg, #672ca6 0%, #85a2d4 100%);
+    background: linear-gradient(135deg, #ab8bca 0%, #5b85d1 100%);
+    
     border:0;
     color: #fff;
     border-radius: 5px;
     padding: 7px 0;
+}
+button:hover{
+    /* background: linear-gradient(135deg, #69498a 0%, #85a2d4 100%); */
+    background-color: #45a049;
+  transform: scale(1.0); /* Slight zoom effect */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 form.login h1, form.register h1{
     text-align: center;
