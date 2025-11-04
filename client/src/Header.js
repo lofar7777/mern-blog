@@ -26,7 +26,7 @@ export default function Header() {
 
   return (
     <header>
-      <Link to="/" className="logo">Mbpg Blogs</Link>
+      <Link to="/" className="logo">Blog Page DIT</Link>
       <nav>
         {username && (
           <>

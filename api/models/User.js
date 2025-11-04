@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mysql = require('mysql2');
 const {Schema, model} = mongoose;
 
 const UserSchema = new Schema({
